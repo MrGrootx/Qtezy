@@ -3,7 +3,7 @@ import { SignUp } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <BgGrid>
+    <BgGrid className="items-start">
       <SignUp
         appearance={{
           elements: {
