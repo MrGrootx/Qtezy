@@ -8,6 +8,7 @@ export default function Home() {
         <BgGrid className="items-start">
           <HeroSection />
         </BgGrid>
+        1
       </div>
     </>
   );

@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -23,20 +24,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${fontSans.variable} font-sans antialiased bg-white dark:bg-[oklch(0.05_0_0)]`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${fontSans.variable} font-sans antialiased bg-white dark:bg-[oklch(0.05_0_0)]`}
         >
-          <div className="relative flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider attribute="class" defaultTheme="dark">
+            <div className="relative flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
