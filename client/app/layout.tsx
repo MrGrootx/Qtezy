@@ -26,7 +26,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontSans.variable} font-sans antialiased`}>
         <ThemeProvider
+          attribute="class"
           defaultTheme="dark"
+          enableSystem
+          
         >
           <div className="relative flex flex-col min-h-screen">
             <Header />
