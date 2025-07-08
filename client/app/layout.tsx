@@ -24,12 +24,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${fontSans.variable} font-sans antialiased`}>
+      <body className={`${fontSans.variable} font-sans antialiased bg-white dark:bg-[oklch(0.05_0_0)]`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
-          
+          forcedTheme="dark"
         >
           <div className="relative flex flex-col min-h-screen">
             <Header />

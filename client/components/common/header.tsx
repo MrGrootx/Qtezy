@@ -13,7 +13,7 @@ const Header = () => {
           height={40}
           className="hover:scale-110 transition-transform duration-300 ease-in-out hover:-rotate-12 hover:cursor-pointer"
         />
-        <Link href="/">tezy</Link>
+        <Link href="/" className="text-2xl font-bold hidden lg:block">tezy</Link>
       </div>
       <div>
         <Link href="/">Sign In</Link>

@@ -1,5 +1,6 @@
-import React from 'react'
-import { Cover } from '../ui/cover';
+import React from "react";
+import { Cover } from "../ui/cover";
+import { ShinyButton } from "../ui/ShinyButton";
 
 const HeroSection = () => {
   return (
@@ -8,11 +9,17 @@ const HeroSection = () => {
         Quotes that inspire <br /> at <Cover>thoughts that last</Cover>
       </h3>
       <p className="text-lg  md:text-lg lg:text-xl max-w-2xl mx-auto text-center mt-4 relative z-20">
-        Discover wisdom, find inspiration, and share meaningful quotes that
-        touch the heart and mind.
+        Discover wisdom, find inspiration, and{" "}
+        <span className="font-semibold text-gray-400 hover:translate-y-6 transition-all">
+          share meaningful quotes
+        </span>{" "}
+        that touch the heart and mind.
       </p>
+      <div className="flex justify-center items-center mt-6 gap-4">
+        <ShinyButton>Share Your Quote</ShinyButton>
+      </div>
     </section>
   );
-}
+};
 
-export default HeroSection
+export default HeroSection;
