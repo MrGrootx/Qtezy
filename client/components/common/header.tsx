@@ -7,12 +7,13 @@ import { ModeToggle } from "./ThemeToggle";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { ShieldUser } from "lucide-react";
 import { checkAdminStatus } from "@/lib/auth";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const Header = () => {
   const { user, isLoaded } = useUser();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
-  
+
   useEffect(() => {
     const verifyAdminStatus = async () => {
       if (isLoaded && user) {
@@ -49,11 +50,23 @@ const Header = () => {
       </Link>
       <div className="flex items-center gap-2">
         {!isChecking && isAdmin && (
-          <Button variant="destructive" size="icon" className="cursor-pointer" asChild>
-            <Link href="/admin">
-              <ShieldUser className="h-[1.2rem] w-[1.2rem]" />
-            </Link>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="destructive"
+                size="icon"
+                className="cursor-pointer"
+                asChild
+              >
+                <Link href="/admin">
+                  <ShieldUser className="h-[1.2rem] w-[1.2rem]" />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Go to Admin Dashboard</p>
+            </TooltipContent>
+          </Tooltip>
         )}
         <SignedIn>
           <Button className="hover:cursor-pointer" size={"sm"} asChild>
