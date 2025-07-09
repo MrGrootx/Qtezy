@@ -8,11 +8,18 @@ import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
 import { Menu, ShieldUser } from "lucide-react";
 import { checkAdminStatus } from "@/lib/auth";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 
 const Header = () => {
   const { user, isLoaded } = useUser();
   const [isAdmin, setIsAdmin] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   useEffect(() => {
     const verifyAdminStatus = async () => {
@@ -49,14 +56,80 @@ const Header = () => {
         </h4>
       </Link>
       <div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="cursor-pointer lg:hidden"
-          asChild
-        >
-          <Menu />
-        </Button>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer lg:hidden"
+              asChild
+            >
+              <Menu />
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <div className="p-6">
+              <SheetTitle className="text-lg font-semibold mb-6">
+                Navigation
+              </SheetTitle>
+              <div className="flex flex-col space-y-4">
+                {!isChecking && isAdmin && (
+                  <Button
+                    variant="destructive"
+                    className="justify-start gap-3 h-12"
+                    asChild
+                    onClick={() => setIsSheetOpen(false)}
+                  >
+                    <Link href="/admin">
+                      <ShieldUser className="h-5 w-5" />
+                      Admin Dashboard
+                    </Link>
+                  </Button>
+                )}
+
+                <SignedIn>
+                  <Button
+                    variant="default"
+                    className="justify-start gap-3 h-12"
+                    asChild
+                    onClick={() => setIsSheetOpen(false)}
+                  >
+                    <Link href="/dashboard">Dashboard</Link>
+                  </Button>
+                </SignedIn>
+
+                <SignedOut>
+                  <Button
+                    variant="outline"
+                    className="justify-start gap-3 h-12"
+                    asChild
+                    onClick={() => setIsSheetOpen(false)}
+                  >
+                    <Link href="/sign-in">Sign In</Link>
+                  </Button>
+                </SignedOut>
+
+                <div className="flex items-center justify-between py-2">
+                  <span className="text-sm font-medium">Theme</span>
+                  <ModeToggle />
+                </div>
+
+                <SignedIn>
+                  <div className="flex items-center justify-between py-2 border-t pt-4 z-40">
+                    <span className="text-sm font-medium">Account</span>
+                    <UserButton
+                      appearance={{
+                        elements: {
+                          userButtonPopoverCard: { pointerEvents: "initial" },
+                        },
+                      }}
+                    />
+                  </div>
+                </SignedIn>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
       <div className="lg:block hidden">
         <div className="flex items-center gap-2">
