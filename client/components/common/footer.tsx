@@ -32,7 +32,7 @@ const footer = () => {
         </div>
       </div>
       <Separator />
-      <div className="mt-8 mb-8 flex items-center justify-between space-y-2 w-full">
+      <div className="mt-8 mb-8 flex-col lg:flex-row flex items-center justify-between space-y-2 w-full">
         <small className="text-sm text-gray-500 dark:text-gray-400 ">
           © {new Date().getFullYear()} Qtezy. All rights reserved.
         </small>

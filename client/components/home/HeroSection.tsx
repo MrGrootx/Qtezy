@@ -1,7 +1,7 @@
 import React from "react";
 import { Cover } from "../ui/cover";
 import { ShinyButton } from "../ui/ShinyButton";
-
+ 
 const HeroSection = () => {
   return (
     <section>
