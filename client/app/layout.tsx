@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -24,7 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#e1e8f0",
+        },
+      }}
+    >
       <html lang="en" suppressHydrationWarning>
         <body
           className={`${fontSans.variable} font-sans antialiased bg-white dark:bg-[oklch(0.05_0_0)]`}

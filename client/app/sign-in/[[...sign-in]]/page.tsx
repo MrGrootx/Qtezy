@@ -5,14 +5,7 @@ export default function Page() {
   return (
     <section>
       <BgGrid className="items-start">
-        <SignIn
-          appearance={{
-            elements: {
-              card: "bg-neutral-900 shadow-lg",
-              formButtonPrimary: "bg-indigo-600 hover:bg-indigo-700",
-            },
-          }}
-        />
+        <SignIn />
       </BgGrid>
     </section>
   );

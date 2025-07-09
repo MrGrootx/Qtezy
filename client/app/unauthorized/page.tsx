@@ -27,9 +27,7 @@ export default function UnauthorizedPage() {
             </Link>
           </Button>
           
-          <div className="text-xs text-muted-foreground">
-            If you believe this is an error, please contact support.
-          </div>
+          
         </div>
       </div>
     </div>
