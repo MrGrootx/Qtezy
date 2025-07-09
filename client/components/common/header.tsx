@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ModeToggle } from "./ThemeToggle";
 import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/nextjs";
-import { ShieldUser } from "lucide-react";
+import { Menu, ShieldUser } from "lucide-react";
 import { checkAdminStatus } from "@/lib/auth";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
@@ -48,41 +48,53 @@ const Header = () => {
           Qtezy
         </h4>
       </Link>
-      <div className="flex items-center gap-2">
-        {!isChecking && isAdmin && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="destructive"
-                size="icon"
-                className="cursor-pointer"
-                asChild
-              >
-                <Link href="/admin">
-                  <ShieldUser className="h-[1.2rem] w-[1.2rem]" />
-                </Link>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Go to Admin Dashboard</p>
-            </TooltipContent>
-          </Tooltip>
-        )}
-        <SignedIn>
-          <Button className="hover:cursor-pointer" size={"sm"} asChild>
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
-        </SignedIn>
-        <ModeToggle />
-        <SignedOut>
-          <Button className="hover:cursor-pointer" size={"sm"} asChild>
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
-        </SignedOut>
+      <div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="cursor-pointer lg:hidden"
+          asChild
+        >
+          <Menu />
+        </Button>
+      </div>
+      <div className="lg:block hidden">
+        <div className="flex items-center gap-2">
+          {!isChecking && isAdmin && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="cursor-pointer"
+                  asChild
+                >
+                  <Link href="/admin">
+                    <ShieldUser className="h-[1.2rem] w-[1.2rem]" />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Go to Admin Dashboard</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          <SignedIn>
+            <Button className="hover:cursor-pointer" size={"sm"} asChild>
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          </SignedIn>
+          <ModeToggle />
+          <SignedOut>
+            <Button className="hover:cursor-pointer" size={"sm"} asChild>
+              <Link href="/sign-in">Sign In</Link>
+            </Button>
+          </SignedOut>
 
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
       </div>
     </nav>
   );

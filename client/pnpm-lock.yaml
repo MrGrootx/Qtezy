@@ -50,6 +50,9 @@ importers:
       force:
         specifier: ^0.0.3
         version: 0.0.3
+      framer-motion:
+        specifier: ^12.23.0
+        version: 12.23.0(@emotion/is-prop-valid@1.2.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       lucide-react:
         specifier: ^0.525.0
         version: 0.525.0(react@19.1.0)

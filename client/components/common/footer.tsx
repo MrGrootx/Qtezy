@@ -8,9 +8,9 @@ const footer = () => {
   return (
     <div className="container mx-auto px-4 w-full">
       <Separator />
-      <div className="mt-8 mb-8 flex items-center justify-between space-y-2 w-full">
+      <div className="mt-8 mb-8 flex-col lg:flex-row flex  items-center justify-between space-y-2 w-full">
         <div>
-          <Link href="/" className="flex items-center gap-1 mb-1">
+          <Link href="/" className="flex items-center gap-1 mb-1 justify-center lg:justify-start" >
             <Image src={"/logo.png"} alt="Qtezy Logo" width={20} height={20} />
             <small className="font-semibold">tezy</small>
           </Link>
