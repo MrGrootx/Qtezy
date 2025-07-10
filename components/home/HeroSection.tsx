@@ -1,7 +1,9 @@
 import React from "react";
 import { Cover } from "../ui/cover";
 import { ShinyButton } from "../ui/ShinyButton";
- 
+import ShinyText from "../reactbits/ShinyText";
+import Statistics from "./Statistics";
+
 const HeroSection = () => {
   return (
     <section>
@@ -11,15 +13,23 @@ const HeroSection = () => {
       >
         Quotes that inspire <br /> at <Cover>thoughts that last</Cover>
       </h3>
-      <p className="text-lg  md:text-lg lg:text-xl max-w-2xl mx-auto text-center mt-4 relative z-20">
+      <span className="text-lg  md:text-lg lg:text-xl max-w-2xl mx-auto text-center mt-4 relative z-20">
         Discover wisdom, find inspiration, and{" "}
-        <span className="font-semibold text-gray-400 hover:translate-y-6 transition-all">
-          share meaningful quotes
-        </span>
-        that touch the heart and mind.
-      </p>
+        <ShinyText
+          text="share meaningful quotes"
+          disabled={false}
+          speed={3}
+          className="custom-class font-semibold"
+        />
+        {""} that touch the heart and mind.
+      </span>
+
       <div className="flex justify-center items-center mt-6 gap-4">
         <ShinyButton>Share Your Quote</ShinyButton>
+      </div>
+
+      <div className="max-w-7xl mx-auto mt-8 p-4   shadow-lg relative z-10">
+        <Statistics />
       </div>
     </section>
   );

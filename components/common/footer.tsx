@@ -10,8 +10,17 @@ const footer = () => {
       <Separator />
       <div className="mt-8 mb-8 flex-col lg:flex-row flex  items-center justify-between space-y-2 w-full">
         <div>
-          <Link href="/" className="flex items-center gap-1 mb-1 justify-center lg:justify-start" >
-            <Image src={"/logo.png"} alt="Qtezy Logo" width={20} height={20} />
+          <Link
+            href="/"
+            className="flex items-center gap-1 mb-1 justify-center lg:justify-start"
+          >
+            <Image
+              src={"/logo.png"}
+              alt="Qtezy Logo"
+              width={20}
+              height={20}
+              priority
+            />
             <small className="font-semibold">tezy</small>
           </Link>
           <p className="text-sm text-gray-500 dark:text-gray-400">

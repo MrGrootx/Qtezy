@@ -11,7 +11,7 @@ const BgGrid = ({
   return (
     <div
       className={cn(
-        "relative flex h-[50rem] w-full items-center justify-center bg-gray-50 dark:bg-[oklch(0.05_0_0)]",
+        "relative flex h-[50rem] overflow-hidden w-full items-center justify-center bg-gray-50 dark:bg-[oklch(0.05_0_0)]",
         className
       )}
     >
