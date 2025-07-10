@@ -13,13 +13,12 @@ export default function Home() {
           key={1}
           className="overflow-hidden"
         />
-
         <BgGrid className="items-start">
           <HeroSection />
         </BgGrid>
-        1
-        <div className=" mx-auto px-4 w-full mb-16 ">
-          <BackgroundBeamsWithCollision className="bg-transparent ">
+       
+        <div className=" mx-auto px-4 w-full mb-16">
+          <BackgroundBeamsWithCollision className="bg-transparent">
             <Faq />
           </BackgroundBeamsWithCollision>
         </div>

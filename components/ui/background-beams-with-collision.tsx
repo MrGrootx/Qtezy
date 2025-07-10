@@ -14,19 +14,14 @@ export const BackgroundBeamsWithCollision = ({
   const parentRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
 
   const beams = [
+    // Left side beams
     {
       initialX: 10,
       translateX: 10,
       duration: 7,
       repeatDelay: 3,
       delay: 2,
-    },
-    {
-      initialX: 600,
-      translateX: 600,
-      duration: 3,
-      repeatDelay: 3,
-      delay: 4,
+      side: "left" as const,
     },
     {
       initialX: 100,
@@ -34,6 +29,7 @@ export const BackgroundBeamsWithCollision = ({
       duration: 7,
       repeatDelay: 7,
       className: "h-6",
+      side: "left" as const,
     },
     {
       initialX: 400,
@@ -41,28 +37,51 @@ export const BackgroundBeamsWithCollision = ({
       duration: 5,
       repeatDelay: 14,
       delay: 4,
+      side: "left" as const,
     },
     {
-      initialX: 800,
-      translateX: 800,
-      duration: 11,
-      repeatDelay: 2,
-      className: "h-20",
+      initialX: 600,
+      translateX: 600,
+      duration: 3,
+      repeatDelay: 3,
+      delay: 4,
+      side: "left" as const,
     },
+    // Right side beams
     {
-      initialX: 1000,
-      translateX: 1000,
-      duration: 4,
-      repeatDelay: 2,
-      className: "h-12",
-    },
-    {
-      initialX: 1200,
-      translateX: 1200,
-      duration: 6,
+      initialX: -10,
+      translateX: -10,
+      duration: 8,
       repeatDelay: 4,
+      delay: 1,
+      side: "right" as const,
+    },
+    {
+      initialX: -100,
+      translateX: -100,
+      duration: 6,
+      repeatDelay: 5,
+      delay: 3,
+      className: "h-12",
+      side: "right" as const,
+    },
+    {
+      initialX: -300,
+      translateX: -300,
+      duration: 9,
+      repeatDelay: 3,
       delay: 2,
+      className: "h-8",
+      side: "right" as const,
+    },
+    {
+      initialX: -500,
+      translateX: -500,
+      duration: 4,
+      repeatDelay: 6,
+      delay: 5,
       className: "h-6",
+      side: "right" as const,
     },
   ];
 
@@ -70,7 +89,7 @@ export const BackgroundBeamsWithCollision = ({
     <div
       ref={parentRef}
       className={cn(
-        "h-96 md:h-[40rem] bg-gradient-to-b from-white to-neutral-100 dark:from-neutral-950 dark:to-neutral-800 relative flex items-center w-full justify-center overflow-hidden",
+        "h-96 md:h-[40rem]  bg-gradient-to-b from-white to-neutral-100 dark:from-neutral-950 dark:to-neutral-800 relative flex items-center w-full justify-center overflow-hidden",
         // h-screen if you want bigger
         className
       )}
@@ -112,6 +131,7 @@ const CollisionMechanism = React.forwardRef<
       duration?: number;
       delay?: number;
       repeatDelay?: number;
+      side?: "left" | "right";
     };
   }
 >(({ parentRef, containerRef, beamOptions = {} }, ref) => {
@@ -200,7 +220,8 @@ const CollisionMechanism = React.forwardRef<
           repeatDelay: beamOptions.repeatDelay || 0,
         }}
         className={cn(
-          "absolute left-0 top-20 m-auto h-14 w-px rounded-full bg-gradient-to-t from-gray-500 via-gray-200 to-transparent",
+          "absolute top-20 m-auto h-14 w-px rounded-full bg-gradient-to-t from-gray-500 via-gray-200 to-transparent",
+          beamOptions.side === "right" ? "right-0" : "left-0",
           beamOptions.className
         )}
       />

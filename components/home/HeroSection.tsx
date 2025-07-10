@@ -3,6 +3,7 @@ import { Cover } from "../ui/cover";
 import { ShinyButton } from "../ui/ShinyButton";
 import ShinyText from "../reactbits/ShinyText";
 import Statistics from "./Statistics";
+import { Button } from "../ui/button";
 
 const HeroSection = () => {
   return (
@@ -25,7 +26,15 @@ const HeroSection = () => {
       </span>
 
       <div className="flex justify-center items-center mt-6 gap-4">
-        <ShinyButton>Share Your Quote</ShinyButton>
+        {/* <ShinyButton>Share Your Quote</ShinyButton> */}
+        <Button
+          style={{
+            zIndex: 20,
+          }}
+          size={"lg"}
+        >
+          Share Your Quote
+        </Button>
       </div>
 
       <div className=" max-w-7xl mx-auto mt-8 p-4   shadow-lg relative z-10">

@@ -41,7 +41,7 @@ const faqs = [
 
 const Faq = () => {
   return (
-    <div className="mt-8 w-full p-5 flex flex-col items-center justify-center space-y-2 mb-24">
+    <div className="mt-24 w-full p-5 flex flex-col items-center justify-center space-y-2 mb-24">
       <Button variant="outline" className="pointer-events-none">
         FAQs
       </Button>
@@ -72,7 +72,7 @@ const Faq = () => {
       <Accordion
         type="single"
         collapsible
-        className="w-full max-w-2xl mt-8  "
+        className="w-full max-w-2xl   "
         defaultValue="item-1"
         orientation="horizontal"
       >
