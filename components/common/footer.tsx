@@ -45,9 +45,17 @@ const footer = () => {
         <small className="text-sm text-gray-500 dark:text-gray-400 ">
           © {new Date().getFullYear()} Qtezy. All rights reserved.
         </small>
-        <small className="text-sm text-gray-500 dark:text-gray-400 ">
-          Made with ❤️ for quote lovers everywhere
-        </small>
+        <p className="text-center text-sm text-muted-foreground mt-6">
+          Made with <span className="text-red-500">❤️</span> by{" "}
+          <Link
+            href="https://github.com/MrGrootx"
+            target="_blank"
+            className="font-semibold text-gray-200 hover:text-gray-300 transition-colors"
+          >
+            this guy
+          </Link>{" "}
+          for quote lovers everywhere.
+        </p>
       </div>
     </div>
   );
