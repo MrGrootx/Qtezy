@@ -13,15 +13,15 @@ const HeroSection = () => {
       >
         Quotes that inspire <br /> at <Cover>thoughts that last</Cover>
       </h3>
-      <span className="text-lg  md:text-lg lg:text-xl max-w-2xl mx-auto text-center mt-4 relative z-20">
+      <span className="block max-w-3xl mx-auto text-center mt-4 px-4 text-sm sm:text-base md:text-lg lg:text-xl relative z-20 leading-relaxed">
         Discover wisdom, find inspiration, and{" "}
         <ShinyText
           text="share meaningful quotes"
           disabled={false}
           speed={3}
           className="custom-class font-semibold"
-        />
-        {""} that touch the heart and mind.
+        />{" "}
+        that touch the heart and mind.
       </span>
 
       <div className="flex justify-center items-center mt-6 gap-4">
