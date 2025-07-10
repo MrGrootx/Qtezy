@@ -8,7 +8,7 @@ const HeroSection = () => {
   return (
     <section>
       <h3
-        className="text-3xl  md:text-4xl lg:text-5xl font-semibold max-w-7xl mx-auto text-center mt-6 relative z-20 py-2 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-500 dark:from-neutral-800 dark:via-white dark:to-white"
+        className="text-3xl  md:text-4xl lg:text-5xl font-semibold max-w-7xl mx-auto text-center md:mt-6 relative z-20 py-2 bg-clip-text text-transparent bg-gradient-to-b from-neutral-800 via-neutral-700 to-neutral-500 dark:from-neutral-800 dark:via-white dark:to-white"
         style={{ fontFamily: "Pacifico, cursive" }}
       >
         Quotes that inspire <br /> at <Cover>thoughts that last</Cover>
@@ -28,7 +28,7 @@ const HeroSection = () => {
         <ShinyButton>Share Your Quote</ShinyButton>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-8 p-4   shadow-lg relative z-10">
+      <div className=" max-w-7xl mx-auto mt-8 p-4   shadow-lg relative z-10">
         <Statistics />
       </div>
     </section>
