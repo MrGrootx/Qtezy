@@ -1,0 +1,2 @@
+https://console.upstash.com/redis/48b5d9f1-1f3b-445f-92b7-8bcbe1ac8431?teamid=0
+https://console.neon.tech/app/projects/fancy-poetry-38644641/branches/br-cold-frost-a1dkcras/tables?database=neondb

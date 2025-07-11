@@ -1,6 +1,6 @@
-import { checkAdminStatus } from "@/lib/auth";
 import db from "@/lib/db";
 import { Quote } from "@/types/globals";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -12,12 +12,11 @@ const QuoteSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const isAdmin = await checkAdminStatus();
+    const { userId } = await auth();
 
-    if (!isAdmin) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
     const body: Quote = await req.json();
     const parsedData = QuoteSchema.safeParse(body);
 
@@ -31,10 +30,10 @@ export async function POST(req: Request) {
     const updatedAt = new Date();
 
     const result = await db.query(
-      `INSERT INTO quotes (text, author, category, created_at, updated_at)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO quotes (text, author, category, created_at, updated_at, user_id)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [text, author, category, createdAt, updatedAt]
+      [text, author, category, createdAt, updatedAt, userId]
     );
 
     return NextResponse.json({
