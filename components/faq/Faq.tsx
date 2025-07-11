@@ -41,58 +41,59 @@ const faqs = [
 
 const Faq = () => {
   return (
-    <div className=" w-full p-5 flex flex-col items-center justify-center space-y-2 mb-24">
-      <Button variant="outline" className="pointer-events-none">
-        FAQs
-      </Button>
-      <div>
-        <div className="flex flex-col items-center justify-center space-y-2">
-          <h2
-            className="lg:text-5xl text-xl  font-semibold text-shadow"
-            style={{
-              fontFamily: "Rubik, sans-serif",
-            }}
-          >
-            We’ve Got the Answers
-          </h2>
-          <h2
-            className="lg:text-4xl text-xl  font-semibold text-shadow"
-            style={{
-              fontFamily: "Rubik, sans-serif",
-            }}
-          >
-            You’re Looking For
-          </h2>
+    <div className="w-full min-h-screen flex flex-col items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-4xl mx-auto space-y-8">
+        <div className="text-center space-y-4">
+          <Button variant="outline" className="pointer-events-none">
+            FAQs
+          </Button>
+          <div className="space-y-2">
+            <h2
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-shadow"
+              style={{
+                fontFamily: "Rubik, sans-serif",
+              }}
+            >
+              We've Got the Answers
+            </h2>
+            <h2
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-shadow"
+              style={{
+                fontFamily: "Rubik, sans-serif",
+              }}
+            >
+              You're Looking For
+            </h2>
+          </div>
+          <p className="text-center text-gray-500 dark:text-gray-300 text-sm sm:text-base max-w-2xl mx-auto">
+            Everything you need to know about using our quotes app.
+          </p>
         </div>
-        <p className="text-center text-gray-500 dark:text-gray-300 text-sm mt-1">
-          Everything you need to know about using our quotes app.
-        </p>
-      </div>
 
-      <Accordion
-        type="single"
-        collapsible
-        className="w-full max-w-2xl lg:mt-8  "
-        defaultValue="item-1"
-        orientation="horizontal"
-      >
-        {faqs.map((faq, index) => (
-          <AccordionItem
-            key={index}
-            value={`item-${index + 1}`}
-            style={{
-              fontFamily: "Rubik, sans-serif",
-            }}
-          >
-            <AccordionTrigger className="!no-underline hover:cursor-pointer text-md">
-              {faq.question}
-            </AccordionTrigger>
-            <AccordionContent className="flex flex-col gap-4 text-balance">
-              <p>{faq.answer}</p>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full max-w-2xl mx-auto"
+          defaultValue="item-1"
+        >
+          {faqs.map((faq, index) => (
+            <AccordionItem
+              key={index}
+              value={`item-${index + 1}`}
+              style={{
+                fontFamily: "Rubik, sans-serif",
+              }}
+            >
+              <AccordionTrigger className="!no-underline hover:cursor-pointer text-sm sm:text-base">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-4 text-balance">
+                <p className="text-sm sm:text-base">{faq.answer}</p>
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
     </div>
   );
 };
