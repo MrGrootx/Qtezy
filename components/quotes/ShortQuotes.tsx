@@ -65,7 +65,7 @@ const ShortQuotes = () => {
         >
           Inspiring Quotes
         </h2>
-        <p className="text-center text-gray-300 text-sm mt-1">
+        <p className="text-center text-gray-500 dark:text-gray-300 text-sm mt-1">
           Discover wisdom, motivation, and inspiration from our curated
           collection of meaningful quotes. Let these words spark your creativity
           and brighten your day.

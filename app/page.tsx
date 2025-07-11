@@ -1,6 +1,7 @@
 import BgGrid from "@/components/common/bggrid";
 import Faq from "@/components/faq/Faq";
 import HeroSection from "@/components/home/HeroSection";
+import { SmoothCursor } from "@/components/magicui/SmoothCursor";
 import ShortQuotes from "@/components/quotes/ShortQuotes";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Spotlight } from "@/components/ui/Spotlight";
@@ -9,6 +10,8 @@ export default function Home() {
   return (
     <>
       <div className="relative w-full">
+        <SmoothCursor />
+
         <Spotlight
           fill="rgb(255 255 255 / 0.3)"
           key={1}

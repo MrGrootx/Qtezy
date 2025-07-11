@@ -41,7 +41,7 @@ const faqs = [
 
 const Faq = () => {
   return (
-    <div className="mt-24 w-full p-5 flex flex-col items-center justify-center space-y-2 mb-24">
+    <div className=" w-full p-5 flex flex-col items-center justify-center space-y-2 mb-24">
       <Button variant="outline" className="pointer-events-none">
         FAQs
       </Button>
@@ -64,7 +64,7 @@ const Faq = () => {
             You’re Looking For
           </h2>
         </div>
-        <p className="text-center text-gray-300 text-sm mt-1">
+        <p className="text-center text-gray-500 dark:text-gray-300 text-sm mt-1">
           Everything you need to know about using our quotes app.
         </p>
       </div>

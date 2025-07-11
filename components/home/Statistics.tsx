@@ -23,7 +23,7 @@ const Statistics = () => {
               className="count-up-text"
             />+
           </h3>
-          <span className="text-md text-gray-300/50" style={{
+          <span className="text-md dark:text-gray-300/50 text-gray-500" style={{
             fontFamily: "Pacifico, cursive"
           }}>{stat.label}</span>
         </div>

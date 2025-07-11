@@ -15,11 +15,11 @@ const footer = () => {
             className="flex items-center gap-1 mb-1 justify-center lg:justify-start"
           >
             <Image
-              src={"/logo.png"}
+              src="/logo.png"
               alt="Qtezy Logo"
-              width={20}
-              height={20}
-              priority
+              width={22}
+              height={22}
+              className="transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-12 brightness-0 dark:brightness-100"
             />
             <small className="font-semibold">tezy</small>
           </Link>
@@ -28,7 +28,7 @@ const footer = () => {
           </p>
         </div>
         <div className="space-x-2">
-          <Link href={"https://github.com/MrGrootx"} target="_blank">
+          <Link href={"https://www.instagram.com/grootdev/"} target="_blank">
             <Button variant="outline" size={"icon"} className="cursor-pointer">
               <Instagram />
             </Button>
@@ -50,7 +50,7 @@ const footer = () => {
           <Link
             href="https://github.com/MrGrootx"
             target="_blank"
-            className="font-semibold text-gray-200 hover:text-gray-300 transition-colors"
+            className="font-semibold text-gray-500 dark:text-gray-300 hover:text-gray-300 transition-colors"
           >
             this guy
           </Link>{" "}

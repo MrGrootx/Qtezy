@@ -38,7 +38,7 @@ const HeroSection = () => {
         </Button>
       </div>
 
-      <div className=" max-w-7xl mx-auto mt-8 p-4   shadow-lg relative z-10">
+      <div className=" max-w-7xl mx-auto mt-8 p-4   dark:shadow-lg relative z-10">
         <Statistics />
       </div>
     </section>

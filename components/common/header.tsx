@@ -40,7 +40,6 @@ const Header = () => {
     verifyAdminStatus();
   }, [user, isLoaded]);
 
-  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <nav className="container flex items-center justify-between py-4  px-2 lg:px-8 mx-auto">
@@ -50,7 +49,7 @@ const Header = () => {
           alt="Qtezy Logo"
           width={40}
           height={40}
-          className="transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-12"
+          className="transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-12 brightness-0 dark:brightness-100"
         />
 
         <h4 className="text-2xl font-bold transition-transform duration-300 ease-in-out">
