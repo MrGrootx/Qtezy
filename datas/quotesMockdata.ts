@@ -10,6 +10,7 @@ export const mockQuotes: Quote[] = [
     totalLikes: 154,
     createdAt: new Date("2024-01-15T10:23:00Z"),
     updatedAt: new Date("2024-01-15T10:23:00Z"),
+    isLiked: true,
   },
   {
     id: "quote_2",
@@ -91,5 +92,23 @@ export const mockQuotes: Quote[] = [
     totalLikes: 310,
     createdAt: new Date("2024-06-28T21:22:00Z"),
     updatedAt: new Date("2024-06-28T21:22:00Z"),
+  },
+  {
+    id: "quote_11",
+    text: "The only way to do great work is to love what you do.",
+    author: "Steve Jobs",
+    category: "Entrepreneur",
+    totalLikes: 234,
+    createdAt: new Date("2024-07-10T15:40:00Z"),
+    updatedAt: new Date("2024-07-10T15:40:00Z"),
+  },
+  {
+    id: "quote_12",
+    text: "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+    author: "Winston S. Churchill",
+    category: "Politician",
+    totalLikes: 189,
+    createdAt: new Date("2024-07-15T12:00:00Z"),
+    updatedAt: new Date("2024-07-15T12:00:00Z"),
   },
 ];

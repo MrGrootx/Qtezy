@@ -20,4 +20,5 @@ export interface Quote {
   totalLikes: number;
   createdAt: Date;
   updatedAt: Date;
+  isLiked?: boolean;
 }

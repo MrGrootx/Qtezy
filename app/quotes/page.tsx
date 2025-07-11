@@ -1,9 +1,18 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Search from "./Search";
 import Categories from "./Categories";
+import { cn } from "@/lib/utils";
+import QuotesCard from "./QuotesCard";
+import { mockQuotes } from "@/datas/quotesMockdata";
+import { useParallax } from "@/hooks/useParallax";
+import "./parallax.css";
 
 const page = () => {
+  const scrollY = useParallax();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="container mx-auto px-2 lg:px-8">
       <div className="w-full flex justify-center mt-8 p-4">
@@ -31,6 +40,39 @@ const page = () => {
         <Button className="mt-4" size={"lg"}>
           Share Your Quote
         </Button>
+      </div>
+      <div className="mt-8 mb-8 parallax-container" ref={containerRef}>
+        <div className="masonry-grid columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 p-4">
+          {mockQuotes.map((quote, index) => {
+            const parallaxOffset = (index % 4) * 0.2;
+            const transformY = scrollY * parallaxOffset;
+
+            return (
+              <div
+                key={index}
+                className="masonry-item quote-card-enter break-inside-avoid mb-4 will-change-transform"
+                style={{
+                  transform: `translateY(${transformY + (index % 3) * 15}px)`,
+                  transition: "transform 0.1s ease-out",
+                  animationDelay: `${index * 0.1}s`,
+                }}
+              >
+                <div className="quote-card">
+                  <QuotesCard
+                    data={quote}
+                    onLike={() => console.log("Liked!")}
+                    onShare={() => console.log("Shared!")}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex justify-center">
+          <Button className=" mt-4" size={"lg"}>
+            Load More
+          </Button>
+        </div>
       </div>
     </div>
   );
