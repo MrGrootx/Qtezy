@@ -54,7 +54,7 @@ export async function POST(
   } catch (error) {
     console.error("Error liking quote:", error);
     return NextResponse.json(
-      { error: "Failed to like the quote" },
+      { error: "An error occurred while processing your request." },
       { status: 500 }
     );
   }
