@@ -32,6 +32,7 @@ const HeroSection = () => {
             zIndex: 20,
           }}
           size={"lg"}
+          className="cursor-pointer"
         >
           Share Your Quote
         </Button>
