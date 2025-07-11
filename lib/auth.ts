@@ -10,7 +10,6 @@ export async function checkAdminStatus(): Promise<boolean> {
       return false;
     }
 
-    // Check role from private metadata (server-side only)
     const privateMetadata = sessionClaims?.metadata as
       | { role?: string }
       | undefined;
