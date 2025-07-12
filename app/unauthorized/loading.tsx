@@ -2,7 +2,7 @@
 import Loader from "@/components/Loader";
 
  
-export default function Loading() {
+export default function LoadingUnauthorized() {
   return (
     <>
       <div className="flex items-center justify-center h-[400px] md:h-[800px] overflow-hidden">
