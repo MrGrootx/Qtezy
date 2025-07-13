@@ -82,7 +82,7 @@ const ShortQuotes = () => {
                 username={review.author}
                 body={review.text}
                 category={review.category}
-                likes={review.totalLikes}
+                likes={review.total_likes}
               />
             ))}
         </Marquee>
@@ -94,7 +94,7 @@ const ShortQuotes = () => {
               username={review.author}
               body={review.text}
               category={review.category}
-              likes={review.totalLikes}
+              likes={review.total_likes}
             />
           ))}
         </Marquee>

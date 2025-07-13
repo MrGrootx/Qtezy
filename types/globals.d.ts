@@ -17,7 +17,7 @@ export interface Quote {
   text: string;
   author: string;
   category: string;
-  totalLikes: number;
+  total_likes: number;
   createdAt: Date;
   updatedAt: Date;
   isLiked?: boolean;

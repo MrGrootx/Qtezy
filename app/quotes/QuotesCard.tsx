@@ -72,7 +72,7 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare }) => {
               fontFamily: "Rubik, sans-serif",
             }}
           >
-            {data?.totalLikes || 0}
+            {data?.total_likes || 0}
           </span>
         </div>
       </div>

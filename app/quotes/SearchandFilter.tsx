@@ -1,17 +1,65 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState, useCallback } from "react";
 import Search from "./Search";
 import Categories from "./Categories";
 
-const SearchandFilter = () => {
+interface SearchandFilterProps {
+  onSearchChange?: (query: string) => void;
+  onCategoryChange?: (category: string) => void;
+  searchQuery?: string;
+  selectedCategory?: string;
+}
+
+const SearchandFilter = ({ 
+  onSearchChange, 
+  onCategoryChange, 
+  searchQuery, 
+  selectedCategory 
+}: SearchandFilterProps) => {
+  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery || "");
+  const [localSelectedCategory, setLocalSelectedCategory] = useState(selectedCategory || "");
+
+  const handleSearchChange = useCallback((query: string) => {
+    setLocalSearchQuery(query);
+    onSearchChange?.(query);
+  }, [onSearchChange]);
+
+  const handleCategoryChange = useCallback((category: string) => {
+    setLocalSelectedCategory(category);
+    onCategoryChange?.(category);
+  }, [onCategoryChange]);
+
   return (
     <>
       <div className="w-full flex justify-center mt-8 p-4">
-        <Search />
+        <Search 
+          onSearch={handleSearchChange} 
+          defaultValue={localSearchQuery}
+        />
       </div>
       <div className="px-4 mb-3">
-        <Categories />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <Categories 
+            selectedCategory={localSelectedCategory}
+            onCategorySelect={handleCategoryChange}
+          />
+          {(localSearchQuery || localSelectedCategory) && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                setLocalSearchQuery("");
+                setLocalSelectedCategory("");
+                onSearchChange?.("");
+                onCategoryChange?.("");
+              }}
+              className="self-start sm:self-center hover:cursor-pointer"
+            >
+              Clear Filters
+            </Button>
+          )}
+        </div>
       </div>
       <div className="flex items-center justify-center flex-col">
         <h1

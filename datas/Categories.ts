@@ -1,14 +1,15 @@
 const categories = [
   "Inspiration",
-  "Motivation",
-  "Wisdom",
-  "Life",
-  "Humor",
+  "Motivation", 
   "Love",
   "Success",
-  "Friendship",
-  "Education",
   "Leadership",
+  "Scientist", 
+  "Poet",
+  "Entrepreneur",
+  "Athlete",
+  "Writer",
+  "Comedian",
 ];
 
 export default categories;

@@ -1,27 +1,43 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { ratelimit } from "@/lib/ratelimiter";
+import { ratelimit, strictRatelimit } from "@/lib/ratelimiter";
 import { getClientIp } from "@/lib/ip";
 
 const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/forum(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isApiRoute = createRouteMatcher(["/api(.*)"]);
+const isQuotesApiRoute = createRouteMatcher(["/api/quotes"]);
+const isSensitiveApiRoute = createRouteMatcher([
+  "/api/quotes/create", 
+  "/api/quotes/approve", 
+  "/api/quotes/(.+)/like"
+]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isApiRoute(req)) {
     const ip = await getClientIp();
-    const { success, limit, reset, remaining } = await ratelimit.limit(ip);
+    
+    // Use stricter rate limiting for sensitive operations
+    const limiter = isSensitiveApiRoute(req) ? strictRatelimit : ratelimit;
+    
+    // For quotes reading endpoint, use more lenient rate limiting
+    if (isQuotesApiRoute(req) && req.method === "GET") {
+      // Skip rate limiting for read-only quotes API
+      // Or use a very lenient rate limit
+    } else {
+      const { success, limit, reset, remaining } = await limiter.limit(ip);
 
-    if (!success) {
-      return NextResponse.json(
-        {
-          message: "Rate limit exceeded. Please try again later.",
-          limit,
-          reset,
-          remaining,
-        },
-        { status: 429 }
-      );
+      if (!success) {
+        return NextResponse.json(
+          {
+            message: "Rate limit exceeded. Please try again later.",
+            limit,
+            reset,
+            remaining,
+          },
+          { status: 429 }
+        );
+      }
     }
   }
 
