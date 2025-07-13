@@ -7,6 +7,7 @@ import Header from "@/components/common/header";
 import Footer from "@/components/common/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import Providers from "./providers";
 
 const fontSans = FontSans({
   variable: "--font-sans",
@@ -40,7 +41,9 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="dark">
             <div className="relative flex flex-col min-h-screen">
               <Header />
-              <main className="flex-1">{children}</main>
+              <main className="flex-1">
+                <Providers>{children}</Providers>
+              </main>
               <Footer />
             </div>
           </ThemeProvider>

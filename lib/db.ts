@@ -1,7 +1,8 @@
 import { neon } from "@neondatabase/serverless";
 
-const db = neon(process.env.DATABASE_URL!);
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set in the environment.");
+}
 
+const db = neon(process.env.DATABASE_URL);
 export default db;
-
- 

@@ -17,7 +17,7 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare }) => {
   return (
     <figure
       className={cn(
-        "relative cursor-pointer overflow-hidden rounded-lg border p-4 group transition-all duration-300 hover:scale-105 hover:shadow-xl backdrop-blur-sm",
+        "relative cursor-pointer w-full overflow-hidden rounded-lg border p-4 group transition-all duration-300 hover:scale-105 hover:shadow-xl backdrop-blur-sm",
         // light styles
         "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05] shadow-md",
         // dark styles
@@ -60,7 +60,7 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare }) => {
         "{data?.text || ""}"
       </blockquote>
 
-      <div className="flex items-center gap-x-1 justify-between">
+      <div className="flex items-center gap-x-1 justify-between mt-4">
         <small className="text-sm text-gray-500 dark:text-gray-300 font-semibold">
           — {data?.author || "Unknown"}
         </small>
