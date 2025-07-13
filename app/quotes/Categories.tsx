@@ -4,8 +4,8 @@ import categories from "@/datas/Categories";
 import React, { useState, useCallback } from "react";
 
 interface CategoriesProps {
-  onCategorySelect?: (category: string) => void;
   selectedCategory?: string;
+  onCategorySelect?: (category: string) => void;
 }
 
 const Categories = React.memo(

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search as SearchIcon } from "lucide-react";
 
-const Search = () => {
+const Search = ({ onSearch }: { onSearch?: (query: string) => void }) => {
   return (
     <div className="flex w-full items-center gap-2">
       <div className="relative flex-1">
@@ -11,6 +11,7 @@ const Search = () => {
           type="text" 
           placeholder="Search quotes..." 
           className="pl-10"
+          onChange={(e) => onSearch?.(e.target.value || "")}
         />
       </div>
       <Button type="submit">

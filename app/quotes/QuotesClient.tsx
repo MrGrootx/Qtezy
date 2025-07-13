@@ -1,24 +1,48 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import QuotesCard from "./QuotesCard";
 import { mockQuotes } from "@/datas/quotesMockdata";
-import { useQuotes } from "@/hooks/useQuotes";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import "./parallax.css";
+import { useQuery } from "@tanstack/react-query";
+import { fetchQuotes } from "@/server/action";
 
 const QuotesClient: React.FC = () => {
-  const { data: quotes, isLoading, error } = useQuotes();
+  const [mounted, setMounted] = useState(false);
+  
+  const {
+    data: quotes,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["quotes"],
+    queryFn: fetchQuotes,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
-  if (isLoading) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-pulse rounded-lg h-8 w-32 bg-gray-200 dark:bg-gray-700"></div>
       </div>
     );
   }
 
-  if (error) {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-100"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
     return (
       <div className="flex justify-center items-center h-64">
         <p className="text-red-500">Error loading quotes. Please try again.</p>
@@ -32,7 +56,7 @@ const QuotesClient: React.FC = () => {
     <div className="mt-8 mb-8 parallax-container">
       <div className="p-4">
         <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-          <Masonry >
+          <Masonry>
             {quotesToDisplay.map((quote: any, index: number) => {
               return (
                 <div key={quote.id || index} className="w-full mr-4 mb-4">

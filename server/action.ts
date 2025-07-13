@@ -1,10 +1,10 @@
-// Server action for fetching quotes
+import axios from "axios";
 export const fetchQuotes = async () => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/quotes`);
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || "Failed to fetch quotes");
-    return data.data;
+    const res = await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/api/quotes`);
+    if (res.status !== 200)
+      throw new Error(res.data.message || "Failed to fetch quotes");
+    return res.data.data;
   } catch (error) {
     console.error("Error fetching quotes:", error);
     throw error;
