@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import QuotesCard from "./QuotesCard";
 import { mockQuotes } from "@/datas/quotesMockdata";
 import "./parallax.css";
@@ -10,10 +11,19 @@ import { Quote } from "@/types/globals";
 import RateLimitError from "@/components/common/RateLimitError";
 import Loader from "@/components/Loader";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Heart, TwitterIcon } from "lucide-react";
 
 const ITEMS_PER_PAGE = 20;
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface QuotesClientProps {
   searchQuery?: string;
@@ -28,6 +38,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
   const [isLiking, setIsLiking] = useState<Set<string>>(new Set());
   const { isLoaded, isSignedIn } = useAuth();
+  const [openModel, setOpenModel] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -79,13 +90,40 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
     }
     const text = encodeURIComponent(`"${quote.text}" - ${quote.author}`);
     const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`;
-    // navigator.share({
-    //   title: `Quote by ${quote.author}`,
-    //   text,
-    //   url: twitterUrl,
 
-    // });
     window.open(twitterUrl, "_blank");
+  };
+
+  const searchParam = useSearchParams();
+  const quoteId = searchParam.get("quoteId");
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+
+  const openQuoteModal = (quote: Quote) => {
+    if (!quote) return;
+
+    setSelectedQuote(quote);
+    setOpenModel(true);
+
+    const currentParams = new URLSearchParams();
+    if (searchQuery) currentParams.set("search", searchQuery);
+    if (selectedCategory) currentParams.set("category", selectedCategory);
+    currentParams.set("quoteId", quote.id);
+
+    router.push(`/quotes?${currentParams.toString()}`, { scroll: false });
+  };
+
+  const closeModal = () => {
+    setOpenModel(false);
+    setSelectedQuote(null);
+
+    const currentParams = new URLSearchParams();
+    if (searchQuery) currentParams.set("search", searchQuery);
+    if (selectedCategory) currentParams.set("category", selectedCategory);
+
+    const newUrl = currentParams.toString()
+      ? `/quotes?${currentParams.toString()}`
+      : "/quotes";
+    router.replace(newUrl, { scroll: false });
   };
 
   const {
@@ -127,6 +165,25 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
   const displayedQuotes = useMemo(() => {
     return filteredQuotes.slice(0, displayCount);
   }, [filteredQuotes, displayCount]);
+
+  useEffect(() => {
+    if (quoteId && filteredQuotes.length > 0) {
+      const quote = filteredQuotes.find((q: Quote) => q.id === quoteId);
+      if (quote) {
+        setSelectedQuote(quote);
+        setOpenModel(true);
+
+        const currentParams = new URLSearchParams();
+        if (searchQuery) currentParams.set("search", searchQuery);
+        if (selectedCategory) currentParams.set("category", selectedCategory);
+        currentParams.set("quoteId", quoteId);
+
+        router.replace(`/quotes?${currentParams.toString()}`, {
+          scroll: false,
+        });
+      }
+    }
+  }, [quoteId, filteredQuotes, searchQuery, selectedCategory, router]);
 
   const loadMore = () => {
     setDisplayCount((prev) =>
@@ -242,6 +299,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
                   onLike={() => handleLike(quote.id)}
                   onShare={() => handleShare(quote)}
                   isLiking={isLiking.has(quote.id)}
+                  openQuoteModal={openQuoteModal}
                 />
               </div>
             ))}
@@ -260,6 +318,97 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
           )}
         </>
       )}
+
+      <Dialog
+        open={openModel}
+        modal
+        onOpenChange={(open) => {
+          if (!open) {
+            closeModal();
+          }
+        }}
+      >
+        <DialogContent className="max-w-2xl p-0 overflow-hidden border-0">
+          <DialogTitle className="sr-only">Quote Details</DialogTitle>
+          {selectedQuote && (
+            <div
+              className="relative w-full p-6 group"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <Badge variant="outline" className="text-sm">
+                  {selectedQuote.category}
+                </Badge>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleLike(selectedQuote.id)}
+                    disabled={isLiking.has(selectedQuote.id)}
+                    className="transition-all duration-200 hover:scale-110 hover:bg-red-50 dark:hover:bg-red-950/20 hover:cursor-pointer"
+                  >
+                    <Heart
+                      className={`w-5 h-5 ${
+                        selectedQuote.isLiked
+                          ? "fill-red-500 text-red-500"
+                          : "text-gray-500 dark:text-gray-400"
+                      } ${isLiking.has(selectedQuote.id) && "animate-pulse"}`}
+                    />
+                    <span className="ml-1 font-semibold">
+                      {selectedQuote.total_likes || 0}
+                    </span>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleShare(selectedQuote)}
+                    className="transition-all duration-200 hover:scale-110 hover:bg-blue-50 dark:hover:bg-blue-950/20 hover:cursor-pointer"
+                  >
+                    <TwitterIcon className="w-5 h-5 text-blue-500" />
+                  </Button>
+                </div>
+              </div>
+
+              <blockquote
+                className="text-xl md:text-2xl lg:text-3xl text-center leading-relaxed mb-6 text-gray-800 dark:text-gray-200"
+                style={{
+                  fontFamily: "Pacifico, cursive",
+                }}
+              >
+                "{selectedQuote.text}"
+              </blockquote>
+
+              <div className="text-center">
+                <p className="text-lg text-gray-600 dark:text-gray-300 font-semibold">
+                  — {selectedQuote.author}
+                </p>
+              </div>
+
+              {(searchQuery || selectedCategory) && (
+                <div className="mt-6 p-3 bg-gray-100/50 dark:bg-gray-800/50 rounded-lg">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+                    {searchQuery && (
+                      <span>
+                        Found via search: <strong>"{searchQuery}"</strong>
+                      </span>
+                    )}
+                    {searchQuery && selectedCategory && <span> | </span>}
+                    {selectedCategory && (
+                      <span>
+                        In category: <strong>{selectedCategory}</strong>
+                      </span>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

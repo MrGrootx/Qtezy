@@ -12,9 +12,10 @@ interface QuotesCardProps {
   onLike?:  () => void;
   onShare?: (text: string) => void;
   isLiking?: boolean;
+  openQuoteModal?: (quote: Quote) => void;
 }
 
-const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare, isLiking = false }) => {
+const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare, isLiking = false, openQuoteModal }) => {
   return (
     <figure
       className={cn(
@@ -28,6 +29,7 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare, isLiking
         background:
           "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
       }}
+      onClick={() => openQuoteModal && data && openQuoteModal(data)}
     >
       <div className="flex justify-between items-center mb-2">
         <Badge variant="outline">{data?.category}</Badge>
@@ -36,22 +38,32 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare, isLiking
             <Button
               size={"icon"}
               variant="ghost"
-              onClick={onLike}
+              onClick={(e) => {
+                e.stopPropagation();
+                onLike && onLike();
+              }}
               disabled={isLiking}
               className={cn(
-                "cursor-pointer",
+                "cursor-pointer transition-all duration-200 hover:scale-110 hover:bg-red-50 dark:hover:bg-red-950/20",
                 isLiking && "opacity-50 cursor-not-allowed"
               )}
             >
-              <Heart className={cn(isLiking && "animate-pulse")} />
+              <Heart className={cn(
+                "w-4 h-4",
+                data?.isLiked ? "fill-red-500 text-red-500" : "text-gray-500 dark:text-gray-400",
+                isLiking && "animate-pulse"
+              )} />
             </Button>
             <Button
               size={"icon"}
               variant="ghost"
-              onClick={() => onShare && onShare(data?.text || "")}
-              className="cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                onShare && onShare(data?.text || "");
+              }}
+              className="cursor-pointer transition-all duration-200 hover:scale-110 hover:bg-blue-50 dark:hover:bg-blue-950/20"
             >
-              <TwitterIcon />
+              <TwitterIcon className="w-4 h-4 text-blue-500" />
             </Button>
           </div>
         </div>

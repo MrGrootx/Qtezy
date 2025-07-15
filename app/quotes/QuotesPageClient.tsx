@@ -17,10 +17,11 @@ const QuotesPageClient: React.FC = () => {
   );
 
   const updateURL = useCallback(
-    (search: string, category: string) => {
+    (search: string, category: string, quoteId?: string) => {
       const params = new URLSearchParams();
       if (search) params.set("search", search);
       if (category) params.set("category", category);
+      if (quoteId) params.set("quoteId", quoteId);
 
       const queryString = params.toString();
       const newURL = queryString ? `${pathname}?${queryString}` : pathname;
@@ -33,17 +34,19 @@ const QuotesPageClient: React.FC = () => {
   const handleSearchChange = useCallback(
     (query: string) => {
       setSearchQuery(query);
-      updateURL(query, selectedCategory);
+      const currentQuoteId = searchParams.get("quoteId");
+      updateURL(query, selectedCategory, currentQuoteId || undefined);
     },
-    [selectedCategory, updateURL]
+    [selectedCategory, updateURL, searchParams]
   );
 
   const handleCategoryChange = useCallback(
     (category: string) => {
       setSelectedCategory(category);
-      updateURL(searchQuery, category);
+      const currentQuoteId = searchParams.get("quoteId");
+      updateURL(searchQuery, category, currentQuoteId || undefined);
     },
-    [searchQuery, updateURL]
+    [searchQuery, updateURL, searchParams]
   );
 
   useEffect(() => {
