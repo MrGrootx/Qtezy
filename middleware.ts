@@ -8,22 +8,21 @@ const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 const isApiRoute = createRouteMatcher(["/api(.*)"]);
 const isQuotesApiRoute = createRouteMatcher(["/api/quotes"]);
 const isSensitiveApiRoute = createRouteMatcher([
-  "/api/quotes/create", 
-  "/api/quotes/approve", 
-  "/api/quotes/(.+)/like"
+  "/api/quotes/create",
+  "/api/quotes/approve",
+  "/api/quotes/(.+)/like",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isApiRoute(req)) {
     const ip = await getClientIp();
-    
-    // Use stricter rate limiting for sensitive operations
+
     const limiter = isSensitiveApiRoute(req) ? strictRatelimit : ratelimit;
-    
-    // For quotes reading endpoint, use more lenient rate limiting
+
     if (isQuotesApiRoute(req) && req.method === "GET") {
-      // Skip rate limiting for read-only quotes API
-      // Or use a very lenient rate limit
+      
+
+      return;
     } else {
       const { success, limit, reset, remaining } = await limiter.limit(ip);
 
@@ -42,25 +41,27 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   const { userId, sessionClaims } = await auth();
-  
+
   if (isAdminRoute(req)) {
     if (!userId) {
-      return NextResponse.redirect(new URL('/sign-in', req.url));
+      return NextResponse.redirect(new URL("/sign-in", req.url));
     }
-    
-    const privateMetadata = sessionClaims?.metadata as { role?: string } | undefined;
+
+    const privateMetadata = sessionClaims?.metadata as
+      | { role?: string }
+      | undefined;
     const userRole = privateMetadata?.role;
-    
+
     if (userRole !== "admin") {
-      return NextResponse.redirect(new URL('/unauthorized', req.url));
+      return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
-    
-    return;  
+
+    return;
   }
-  
+
   if (isProtectedRoute(req)) {
     if (!userId) {
-      return NextResponse.redirect(new URL('/sign-in', req.url));
+      return NextResponse.redirect(new URL("/sign-in", req.url));
     }
   }
 });
