@@ -10,7 +10,7 @@ import React from "react";
 interface QuotesCardProps {
   data?: Quote;
   onLike?:  () => void;
-  onShare?: () => void;
+  onShare?: (text: string) => void;
   isLiking?: boolean;
 }
 
@@ -48,7 +48,7 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare, isLiking
             <Button
               size={"icon"}
               variant="ghost"
-              onClick={onShare}
+              onClick={() => onShare && onShare(data?.text || "")}
               className="cursor-pointer"
             >
               <TwitterIcon />

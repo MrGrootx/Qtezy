@@ -72,6 +72,21 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
 
     likeMutation.mutate(quoteId);
   };
+  const handleShare = (quote: Quote) => {
+    if (!navigator.canShare) {
+      toast.error("Sharing is not supported in this browser.");
+      return;
+    }
+    const text = encodeURIComponent(`"${quote.text}" - ${quote.author}`);
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`;
+    // navigator.share({
+    //   title: `Quote by ${quote.author}`,
+    //   text,
+    //   url: twitterUrl,
+
+    // });
+    window.open(twitterUrl, "_blank");
+  };
 
   const {
     data: quotes,
@@ -225,7 +240,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
                 <QuotesCard
                   data={quote}
                   onLike={() => handleLike(quote.id)}
-                  onShare={() => console.log("Shared quote:", quote.id)}
+                  onShare={() => handleShare(quote)}
                   isLiking={isLiking.has(quote.id)}
                 />
               </div>
