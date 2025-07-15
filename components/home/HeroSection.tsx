@@ -4,6 +4,8 @@ import { ShinyButton } from "../ui/ShinyButton";
 import ShinyText from "../reactbits/ShinyText";
 import Statistics from "./Statistics";
 import { Button } from "../ui/button";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
@@ -27,15 +29,29 @@ const HeroSection = () => {
 
       <div className="flex justify-center items-center mt-6 gap-4">
         {/* <ShinyButton>Share Your Quote</ShinyButton> */}
-        <Button
-          style={{
-            zIndex: 20,
-          }}
-          size={"lg"}
-          className="cursor-pointer"
-        >
-          Share Your Quote
-        </Button>
+        <SignedIn>
+          <Button
+            style={{
+              zIndex: 20,
+            }}
+            size={"lg"}
+            asChild
+          >
+            <Link href="/quotes/create">Share Your Quote</Link>
+          </Button>
+        </SignedIn>
+        
+        <SignedOut>
+          <Button
+            style={{
+              zIndex: 20,
+            }}
+            size={"lg"}
+            asChild
+          >
+            <Link href="/sign-in">Share Your Quote</Link>
+          </Button>
+        </SignedOut>
       </div>
 
       <div className=" max-w-7xl mx-auto mt-8 p-4   dark:shadow-lg relative z-10">
