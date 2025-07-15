@@ -9,11 +9,12 @@ import React from "react";
 
 interface QuotesCardProps {
   data?: Quote;
-  onLike?: () => void;
+  onLike?:  () => void;
   onShare?: () => void;
+  isLiking?: boolean;
 }
 
-const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare }) => {
+const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare, isLiking = false }) => {
   return (
     <figure
       className={cn(
@@ -36,9 +37,13 @@ const QuotesCard: React.FC<QuotesCardProps> = ({ data, onLike, onShare }) => {
               size={"icon"}
               variant="ghost"
               onClick={onLike}
-              className="cursor-pointer"
+              disabled={isLiking}
+              className={cn(
+                "cursor-pointer",
+                isLiking && "opacity-50 cursor-not-allowed"
+              )}
             >
-              <Heart />
+              <Heart className={cn(isLiking && "animate-pulse")} />
             </Button>
             <Button
               size={"icon"}

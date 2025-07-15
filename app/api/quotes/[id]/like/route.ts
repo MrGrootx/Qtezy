@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
-
+ 
 export async function POST(
   req: Request,
   context: { params: Promise<{ id: string }> }
@@ -10,7 +10,7 @@ export async function POST(
     const { userId } = await auth();
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
     const { id: quoteId } = await context.params;
@@ -48,11 +48,10 @@ export async function POST(
 
       return NextResponse.json({
         message: "You liked this quote!",
-        success: true,
+        success: 200,
       });
     }
   } catch (error) {
-    console.error("Error liking quote:", error);
     return NextResponse.json(
       { error: "An error occurred while processing your request." },
       { status: 500 }
