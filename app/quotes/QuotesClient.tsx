@@ -44,8 +44,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
   });
 
   const filteredQuotes = useMemo(() => {
-    const quotesToFilter =
-      quotes && quotes.length > 0 ? mockQuotes : mockQuotes;
+    const quotesToFilter = quotes && quotes.length > 0 ? mockQuotes : mockQuotes;
 
     return quotesToFilter.filter((quote: Quote) => {
       const matchesSearch =
@@ -155,6 +154,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
       ) : (
         <>
           <div 
+            key={`quotes-${displayCount}`}
             className="p-4"
             style={{
               columns: '300px',
