@@ -2,22 +2,46 @@
 import GlassCard from "@/components/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Copy, SparkleIcon, X } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogCancel,
-  AlertDialogAction,
   AlertDialogHeader,
   AlertDialogFooter,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-const AiGenerator = () => {
+import { toast } from "sonner";
+import { useGenerateQuote } from "@/hooks/useGenerateQuote";
+import { GeneratedQuote } from "@/types/globals";
+
+interface AiGeneratorProps {
+  topic: string;
+  setTopic: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const AiGenerator = ({topic, setTopic}: AiGeneratorProps) => {
   const [openModel, setOpenModel] = React.useState(false);
+  const { mutate: generate, data: quote, isPending } = useGenerateQuote();
+  const [quotes, setQuotes] = useState<GeneratedQuote[]>([]);
+  const handleGenerate = () => {
+    if (!topic) return;
+    generate(topic, {
+      onSuccess: (newQuote) => {
+        toast.success("Quote generated successfully!");
+        setQuotes((prev) => [newQuote, ...prev]);
+        setTopic("");
+      },
+
+      onError: (err) => {
+        console.error("Failed to generate quote", err);
+      },
+    });
+  };
 
   const closeModal = () => setOpenModel(false);
   return (
@@ -57,7 +81,12 @@ const AiGenerator = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader className="flex items-center justify-between flex-row">
-            <AlertDialogTitle>AI Quote Generator</AlertDialogTitle>
+            <div>
+              <AlertDialogTitle>AI Quote Generator</AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-gray-500 dark:text-gray-400">
+                Enter a topic or theme to generate a quote.
+              </AlertDialogDescription>
+            </div>
             <AlertDialogCancel asChild>
               <Button
                 size="icon"
@@ -71,62 +100,61 @@ const AiGenerator = () => {
           <div className="grid w-full items-center gap-3">
             <Label htmlFor="email">What kind of quote would you like?</Label>
             <Input
-              type="email"
-              id="email"
-              placeholder="eg. Motivation, Life, Success"
+              id="topic"
+              placeholder="e.g. Motivation, Life, Success"
               className="w-full border"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
               autoComplete="off"
             />
           </div>
           <AlertDialogFooter>
             <Button
-              className="w-full cursor-pointer font-semibold"
-              onClick={() => {
-                closeModal();
-              }}
+              onClick={handleGenerate}
+              disabled={isPending}
+              className="w-full hover:cursor-pointer"
             >
-              Generate Quotes
+              {isPending ? "Generating..." : "Generate Quote"}
             </Button>
           </AlertDialogFooter>
-          <AlertDialogHeader>Generated Quotes:</AlertDialogHeader>
-          <div className="dark:bg-black/30 rounded p-3 ">
-            <div className="flex flex-col">
-              <span
-                style={{
-                  fontFamily: "Pacifico, cursive",
-                }}
-                className="text-gray-700 dark:text-gray-300 mb-4"
-              >
-                "The greatest life comes from within your own determination to
-                succeed."
-              </span>
+          {quotes.length > 0 && (
+            <AlertDialogHeader style={{ fontFamily: "Pacifico, cursive" }}>
+              Generated Quotes:
+            </AlertDialogHeader>
+          )}
+          {quotes.slice(0, 3).map((quote, index) => (
+            <div key={index} className="dark:bg-black/30 rounded p-3">
+              <div className="flex flex-col">
+                <span
+                  style={{ fontFamily: "Pacifico, cursive" }}
+                  className="text-gray-700 dark:text-gray-300 mb-2"
+                >
+                  "{quote.title}"
+                </span>
+                <span
+                  className="text-gray-500 text-sm italic"
+                  style={{ fontFamily: "Kanit, sans-serif" }}
+                >
+                  — {quote.author}
+                </span>
+              </div>
+              <div className="flex items-end justify-end w-full mt-2">
+                <div className="flex items-center gap-x-2">
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `${quote.title} ${quote.author}`
+                      )
+                    }
+                  >
+                    <Copy className="mr-1 h-4 w-4" />
+                    Copy Quote
+                  </Button>
+                </div>
+              </div>
             </div>
-            <div className="flex items-end justify-end w-full">
-              <Button variant={"ghost"} className="hover:cursor-pointer">
-                <Copy />
-                Copy Quote
-              </Button>
-            </div>
-          </div>
-          <div className="dark:bg-black/30 rounded p-3 ">
-            <div className="flex flex-col">
-              <span
-                style={{
-                  fontFamily: "Pacifico, cursive",
-                }}
-                className="text-gray-700 dark:text-gray-300 mb-4"
-              >
-                "The greatest life comes from within your own determination to
-                succeed."
-              </span>
-            </div>
-            <div className="flex items-end justify-end w-full">
-              <Button variant={"ghost"} className="hover:cursor-pointer">
-                <Copy />
-                Copy Quote
-              </Button>
-            </div>
-          </div>
+          ))}
         </AlertDialogContent>
       </AlertDialog>
     </GlassCard>

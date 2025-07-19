@@ -17,7 +17,13 @@ import { SendIcon } from "lucide-react";
 import categories from "@/datas/Categories";
 import { Label } from "@/components/ui/label";
 
-const QuoteForm = () => {
+const QuoteForm = ({
+  topic,
+  setTopic,
+}: {
+  topic: string;
+  setTopic: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const {
     register,
     handleSubmit,
@@ -37,7 +43,13 @@ const QuoteForm = () => {
           id="message"
           placeholder="Enter your quote here..."
           maxLength={500}
-          {...register("message", { required: "Quote text is required" })}
+          className="resize-none"
+          rows={4}
+          {...register("message", {
+            required: "Quote text is required",
+            onChange: (e) => setTopic(e.target.value),
+          })}
+          value={topic}
         />
         {errors.message && (
           <p className="text-red-500 text-sm">

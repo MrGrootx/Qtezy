@@ -1,13 +1,11 @@
+"use client";
 import GlassCard from "@/components/GlassCard";
-import { SendIcon, SparkleIcon } from "lucide-react";
 import React from "react";
 import AiGenerator from "./AiGenerator";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import QuoteForm from "./Form";
-import { Button } from "@/components/ui/button";
 
 const page = () => {
+  const [topic, setTopic] = React.useState("");
   return (
     <div className="container mx-auto px-2 lg:px-8  w-full h-screen">
       <h1
@@ -22,7 +20,7 @@ const page = () => {
       </p>
       <div className="flex justify-center items-center flex-col">
         <div className="max-w-3xl w-full">
-          <AiGenerator />
+          <AiGenerator topic={topic} setTopic={setTopic} />
         </div>
         <div className="max-w-3xl w-full mt-4 mb-4">
           <GlassCard>
@@ -32,8 +30,7 @@ const page = () => {
             >
               Submit a Quote
             </h1>
-            <QuoteForm />
-           
+            <QuoteForm topic={topic} setTopic={setTopic} />
           </GlassCard>
         </div>
       </div>

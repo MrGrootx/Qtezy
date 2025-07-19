@@ -22,3 +22,8 @@ export interface Quote {
   updatedAt: Date;
   isLiked?: boolean;
 }
+
+export type GeneratedQuote = {
+  title: string; // the quote
+  author: string; // who said it
+};
