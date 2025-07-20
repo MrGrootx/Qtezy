@@ -11,19 +11,18 @@ declare global {
   }
 }
 
-
 export interface Quote {
-  id: string;
+  id?: string;
   text: string;
   author: string;
   category: string;
-  total_likes: number;
+  total_likes?: number;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   isLiked?: boolean;
 }
 
 export type GeneratedQuote = {
-  title: string; // the quote
-  author: string; // who said it
+  title: string;
+  author: string;
 };

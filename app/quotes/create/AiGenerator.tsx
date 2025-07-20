@@ -3,6 +3,9 @@ import GlassCard from "@/components/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Copy, SparkleIcon, X } from "lucide-react";
 import React, { useState } from "react";
+
+import { z } from "zod";
+
 import {
   AlertDialog,
   AlertDialogContent,
@@ -21,20 +24,31 @@ import { GeneratedQuote } from "@/types/globals";
 
 interface AiGeneratorProps {
   topic: string;
+
   setTopic: React.Dispatch<React.SetStateAction<string>>;
+  setAuthor: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const AiGenerator = ({topic, setTopic}: AiGeneratorProps) => {
+const AiGenerator = ({ topic, setTopic, setAuthor }: AiGeneratorProps) => {
   const [openModel, setOpenModel] = React.useState(false);
   const { mutate: generate, data: quote, isPending } = useGenerateQuote();
   const [quotes, setQuotes] = useState<GeneratedQuote[]>([]);
+  const topicSchema = z
+    .string()
+    .min(1, "Topic is required")
+    .max(25, "Topic must be less than 25 characters");
   const handleGenerate = () => {
-    if (!topic) return;
+    const validation = topicSchema.safeParse(topic);
+    if (!validation.success) {
+      toast.error(validation.error.issues[0].message);
+      return;
+    }
     generate(topic, {
       onSuccess: (newQuote) => {
         toast.success("Quote generated successfully!");
         setQuotes((prev) => [newQuote, ...prev]);
-        setTopic("");
+        setTopic(newQuote.title);
+        setAuthor(newQuote.author);
       },
 
       onError: (err) => {
@@ -118,7 +132,10 @@ const AiGenerator = ({topic, setTopic}: AiGeneratorProps) => {
             </Button>
           </AlertDialogFooter>
           {quotes.length > 0 && (
-            <AlertDialogHeader style={{ fontFamily: "Pacifico, cursive" }}>
+            <AlertDialogHeader
+              style={{ fontFamily: "Pacifico, cursive" }}
+              className="-mb-2"
+            >
               Generated Quotes:
             </AlertDialogHeader>
           )}

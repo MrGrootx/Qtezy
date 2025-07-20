@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -13,26 +13,59 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { SendIcon } from "lucide-react";
+import { LoaderCircle, SendIcon } from "lucide-react";
 import categories from "@/datas/Categories";
 import { Label } from "@/components/ui/label";
+import usePostQuote from "@/hooks/usePostQuote";
+import { toast } from "sonner";
 
 const QuoteForm = ({
   topic,
   setTopic,
+  setAuthor,
+  author,
 }: {
   topic: string;
+  author: string;
   setTopic: React.Dispatch<React.SetStateAction<string>>;
+  setAuthor: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const {
     register,
+    setValue,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    setValue("message", topic);
+    setValue("name", author);
+  }, [topic, author, setValue]);
+
+  const {
+    mutateAsync: postQuote,
+    isPending,
+  } = usePostQuote({
+    onSuccess: (data) => {
+      toast.success("Quote submitted successfully!");
+    },
+    onError: (error) => {
+      toast.error("Failed to submit quote");
+      console.error(error);
+    },
+  });
   const onSubmit = (data: any) => {
-    console.log("Form submitted with data:", data);
+    postQuote({
+      text: data.message,
+      author: data.name,
+      category: data.category,
+      createdAt: new Date(),
+    });
+
+    setTopic("");
+    setAuthor("");
+    setValue("message", "");
   };
 
   return (
@@ -50,6 +83,8 @@ const QuoteForm = ({
             onChange: (e) => setTopic(e.target.value),
           })}
           value={topic}
+          autoComplete="off"
+          onChange={(e) => setTopic(e.target.value)}
         />
         {errors.message && (
           <p className="text-red-500 text-sm">
@@ -58,7 +93,15 @@ const QuoteForm = ({
         )}
 
         <Label htmlFor="name">Author</Label>
-        <Input id="name" autoComplete="off" placeholder="e.g. justgroot" {...register("name")} />
+        <Input
+          id="name"
+          autoComplete="off"
+          placeholder="e.g. justgroot"
+          className="w-full"
+          {...register("name", {
+            onChange: (e) => setAuthor(e.target.value),
+          })}
+        />
 
         <Label htmlFor="category" className="w-full block">
           Category *
@@ -113,8 +156,16 @@ const QuoteForm = ({
           </ul>
         </div>
 
-        <Button className="w-full" type="submit">
-          <SendIcon className="mr-2" />
+        <Button
+          className="w-full hover:cursor-pointer"
+          type="submit"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <LoaderCircle className="mr-2 animate-spin" />
+          ) : (
+            <SendIcon className="mr-2" />
+          )}
           Submit Quote
         </Button>
       </div>

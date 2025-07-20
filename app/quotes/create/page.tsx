@@ -6,6 +6,7 @@ import QuoteForm from "./Form";
 
 const page = () => {
   const [topic, setTopic] = React.useState("");
+  const [author, setAuthor] = React.useState("");
   return (
     <div className="container mx-auto px-2 lg:px-8  w-full h-screen">
       <h1
@@ -20,7 +21,11 @@ const page = () => {
       </p>
       <div className="flex justify-center items-center flex-col">
         <div className="max-w-3xl w-full">
-          <AiGenerator topic={topic} setTopic={setTopic} />
+          <AiGenerator
+            topic={topic}
+            setTopic={setTopic}
+            setAuthor={setAuthor}
+          />
         </div>
         <div className="max-w-3xl w-full mt-4 mb-4">
           <GlassCard>
@@ -30,7 +35,12 @@ const page = () => {
             >
               Submit a Quote
             </h1>
-            <QuoteForm topic={topic} setTopic={setTopic} />
+            <QuoteForm
+              topic={topic}
+              setTopic={setTopic}
+              author={author}
+              setAuthor={setAuthor}
+            />
           </GlassCard>
         </div>
       </div>
