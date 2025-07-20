@@ -45,6 +45,7 @@ const Header = () => {
     <nav className="container flex items-center justify-between py-4  px-2 lg:px-8 mx-auto">
       <Link href="/" className="flex lg:flex-1 items-center gap-1 group ">
         <Image
+          priority={true}
           src="/logo.png"
           alt="Qtezy Logo"
           width={40}

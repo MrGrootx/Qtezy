@@ -111,7 +111,7 @@ const QuoteForm = ({
           name="category"
           rules={{ required: "Category is required" }}
           render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
+            <Select onValueChange={field.onChange} value={field.value ?? ""}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>

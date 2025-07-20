@@ -17,6 +17,7 @@ const footer = () => {
             <Image
               src="/logo.png"
               alt="Qtezy Logo"
+              priority={true}
               width={22}
               height={22}
               className="transition-transform duration-300 ease-in-out group-hover:scale-110 group-hover:-rotate-12 brightness-0 dark:brightness-100"
