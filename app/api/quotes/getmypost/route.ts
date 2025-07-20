@@ -1,13 +1,11 @@
-import { NextResponse } from "next/server";
 import db from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
+  const { userId } = await auth();
   try {
-    const result = await db`
-      SELECT * FROM quotes
-      WHERE status = 'approved'
-      ORDER BY created_at DESC
-    `;
+    const result =  await db`SELECT * FROM quotes WHERE user_id = ${userId}`;
     return NextResponse.json({ success: true, data: result });
   } catch (error) {
     console.error("Failed to fetch quotes:", error);

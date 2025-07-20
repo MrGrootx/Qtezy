@@ -20,6 +20,7 @@ export interface Quote {
   createdAt: Date;
   updatedAt?: Date;
   isLiked?: boolean;
+  status?: "pending" | "approved" | "rejected";
 }
 
 export type GeneratedQuote = {

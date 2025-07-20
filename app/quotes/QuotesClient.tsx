@@ -19,10 +19,7 @@ import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 interface QuotesClientProps {
@@ -107,7 +104,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
     const currentParams = new URLSearchParams();
     if (searchQuery) currentParams.set("search", searchQuery);
     if (selectedCategory) currentParams.set("category", selectedCategory);
-    currentParams.set("quoteId", quote.id);
+    currentParams.set("quoteId", quote.id || "");
 
     router.push(`/quotes?${currentParams.toString()}`, { scroll: false });
   };
@@ -146,7 +143,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
   });
 
   const filteredQuotes = useMemo(() => {
-    const quotesToFilter = quotes && quotes.length > 0 ? quotes : mockQuotes;
+    const quotesToFilter = quotes && quotes.length > 0 ? quotes : [];
 
     return quotesToFilter.filter((quote: Quote) => {
       const matchesSearch =
@@ -296,9 +293,9 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
               >
                 <QuotesCard
                   data={quote}
-                  onLike={() => handleLike(quote.id)}
+                  onLike={() => handleLike(quote.id || "")}
                   onShare={() => handleShare(quote)}
-                  isLiking={isLiking.has(quote.id)}
+                  isLiking={isLiking.has(quote.id || "")}
                   openQuoteModal={openQuoteModal}
                 />
               </div>
@@ -347,8 +344,8 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => handleLike(selectedQuote.id)}
-                    disabled={isLiking.has(selectedQuote.id)}
+                    onClick={() => handleLike(selectedQuote.id || "")}
+                    disabled={isLiking.has(selectedQuote.id || "")}
                     className="transition-all duration-200 hover:scale-110 hover:bg-red-50 dark:hover:bg-red-950/20 hover:cursor-pointer"
                   >
                     <Heart
@@ -356,7 +353,7 @@ const QuotesClient: React.FC<QuotesClientProps> = ({
                         selectedQuote.isLiked
                           ? "fill-red-500 text-red-500"
                           : "text-gray-500 dark:text-gray-400"
-                      } ${isLiking.has(selectedQuote.id) && "animate-pulse"}`}
+                      } ${isLiking.has(selectedQuote.id || "") && "animate-pulse"}`}
                     />
                     <span className="ml-1 font-semibold">
                       {selectedQuote.total_likes || 0}

@@ -1,6 +1,6 @@
+import { Quote } from "@/types/globals";
 import axios, { AxiosError } from "axios";
 
-// Helper function to wait for a specified time
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const fetchQuotes = async (retries = 3): Promise<any> => {
@@ -65,3 +65,31 @@ export const likeQuote = async (
     };
   }
 };
+
+export const CreateQuote = async (quote: Quote): Promise<Quote> => {
+  const response = await axios.post("/api/quotes/create", quote, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response.data; 
+};
+
+
+export const fetchMyQuotes = async (): Promise<any> => {
+  try {
+    const res = await axios.get(
+      `/api/quotes/getmypost`
+    );
+
+    if (res.status !== 200) {
+      throw new Error(res.data.message || "Failed to fetch my quotes");
+    }
+
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching my quotes:", error);
+    throw error instanceof AxiosError ? error : new Error("An unexpected error occurred");
+  }
+}

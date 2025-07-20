@@ -1,16 +1,7 @@
+import { CreateQuote } from "@/server/action";
 import { Quote } from "@/types/globals";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-
-const CreateQuote = async (quote: Quote): Promise<Quote> => {
-  const response = await axios.post("/api/quotes/create", quote, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  return response.data; 
-};
+ 
 
 type UsePostQuoteOptions = {
   onSuccess?: (data: Quote) => void;
