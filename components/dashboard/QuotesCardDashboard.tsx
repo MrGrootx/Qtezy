@@ -29,7 +29,8 @@ const QuotesCardDashboard: React.FC<QuotesCardProps> = ({ data }) => {
         <Badge variant="outline" className="capitalize">
           {data?.category}
         </Badge>
-        <TooltipProvider>
+       <div>
+          <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Badge
@@ -56,6 +57,7 @@ const QuotesCardDashboard: React.FC<QuotesCardProps> = ({ data }) => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+       </div>
       </div>
       <blockquote
         className="mt-2 text-base md:text-lg lg:text-xl text-center"
