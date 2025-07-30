@@ -1,17 +1,40 @@
-import React from 'react'
+import { DataTable } from "@/components/data-table";
+import { SectionCards } from "@/components/section-cards";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { mockQuotes } from "@/datas/quotesMockdata";
+import { Quote } from "@/types/globals";
 
-const AdminPage = async () => {
-  // Simulate a delay to test loading component
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
+const mappedQuotes = mockQuotes.map((q: Quote, idx) => ({
+  id: idx + 1,
+  title: q.text,
+  author: q.author,
+  type: q.category,
+  status: q.status ?? "pending",  
+  progress: 100,
+  likes: q.total_likes ?? 0,
+}));
+
+export default function Page() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">Admin Panel</h1>
-      <p className="text-gray-600 dark:text-gray-300">
-        Welcome to the admin dashboard. Manage your application from here.
-      </p>
-    </div>
-  )
+    <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+      className="container mx-auto px-2 lg:px-8 min-h-screen"
+    >
+      <SidebarInset>
+        <div className="flex flex-1 flex-col">
+          <div className="@container/main flex flex-1 flex-col gap-2">
+            <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+              <SectionCards />
+              <DataTable data={mappedQuotes} />
+            </div>
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
 }
-
-export default AdminPage

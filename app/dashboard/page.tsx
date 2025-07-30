@@ -11,7 +11,7 @@ const Page = () => {
   const totalQuotes = quotes?.length || 0;
   const totalApproved = quotes?.filter((quote: Quote) => quote.status === "approved").length || 0;
   const totalPending = quotes?.filter((quote: Quote) => quote.status === "pending").length || 0;
-
+ 
   return (
     <div className="relative">
       <div className="absolute inset-0 z-0 bg-fixed bg-center bg-cover blur-sm opacity-20"></div>
