@@ -1,3 +1,4 @@
+import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
@@ -21,5 +22,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing quote ID" }, { status: 400 });
   }
 
-  return NextResponse.json({ message: `Quote ${id} approved successfully.` });
+  try {
+    await db.query(`UPDATE quotes SET status = 'approved' WHERE id = $1`, [id]);
+
+    return NextResponse.json({ message: `Quote ${id} approved successfully.` });
+  } catch (err) {
+    console.error("DB Error approving quote:", err);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }

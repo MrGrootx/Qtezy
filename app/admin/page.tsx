@@ -5,14 +5,13 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import useGetAllQuotes from "@/hooks/useGetAllQuotes";
 import { Quote } from "@/types/globals";
 
-
 export default function Page() {
   const { data: allQuotes } = useGetAllQuotes();
-  
+
   const quotesArray = Array.isArray(allQuotes) ? allQuotes : [];
 
   const mappedQuotes = quotesArray.map((q: Quote, idx: number) => ({
-    id: idx + 1,
+    id: q.id,
     title: q.text,
     author: q.author,
     type: q.category,
@@ -20,8 +19,7 @@ export default function Page() {
     progress: 100,
     likes: q.total_likes ?? 0,
   }));
-  
-  
+
   return (
     <SidebarProvider
       style={

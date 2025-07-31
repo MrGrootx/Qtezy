@@ -23,14 +23,9 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-
-import { z } from "zod";
+import { any, z } from "zod";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ChartConfig } from "@/components/ui/chart";
-
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -49,7 +44,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { Check, Eye, Heart, Trash, X } from "lucide-react";
+import { Check, Eye, Loader, Trash, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
   Dialog,
@@ -59,9 +54,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Button } from "./ui/button";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
 export const schema = z.object({
-  id: z.number(),
+  id: any(),
   title: z.string(),
   author: z.string(),
   type: z.string(),
@@ -70,131 +70,163 @@ export const schema = z.object({
   likes: z.number(),
 });
 
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
-  {
-    accessorKey: "title",
-    header: "Title",
-
-    enableHiding: false,
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
-    cell: ({ row }) => (
-      <div className="w-32">
-        <Badge variant="outline" className="text-muted-foreground px-1.5">
-          {row.original.type}
-        </Badge>
-      </div>
-    ),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => {
-      const status = row.original.status;
-      let icon = null;
-      let color: "outline" | "success" | "warning" | "destructive" = "outline";
-      if (status === "approved") {
-        icon = (
-          <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
-        );
-        color = "success";
-      } else if (status === "pending") {
-        icon = <IconLoader />;
-        color = "warning";
-      } else if (status === "rejected") {
-        icon = <X className="text-red-500" />;
-        color = "destructive";
-      }
-      return (
-        <Badge
-          variant={color}
-          appearance="light"
-          className="text-muted-foreground px-1.5 flex items-center gap-1"
-        >
-          {status.charAt(0).toUpperCase() + status.slice(1)}
-        </Badge>
-      );
+export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
+  const columns: ColumnDef<z.infer<typeof schema>>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+      enableHiding: false,
     },
-  },
-  {
-    accessorKey: "likes",
-    header: "Likes",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{row.original.likes}</span>
-    ),
-  },
-  {
-    id: "actions",
-    cell: (data) => (
-      <div className="flex items-center gap-2">
-        <Dialog>
+    {
+      accessorKey: "author",
+      header: "Author",
+      cell: ({ row }) => (
+        <div className="w-32">
+          <Badge variant="outline" className="text-muted-foreground px-1.5">
+            {row.original.author}
+          </Badge>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const status = row.original.status;
+        let icon = null;
+        let color: "outline" | "success" | "warning" | "destructive" =
+          "outline";
+        if (status === "approved") {
+          icon = (
+            <IconCircleCheckFilled className="fill-green-500 dark:fill-green-400" />
+          );
+          color = "success";
+        } else if (status === "pending") {
+          icon = <IconLoader />;
+          color = "warning";
+        } else if (status === "rejected") {
+          icon = <X className="text-red-500" />;
+          color = "destructive";
+        }
+        return (
+          <Badge
+            variant={color}
+            appearance="light"
+            className="text-muted-foreground px-1.5 flex items-center gap-1"
+          >
+            {status.charAt(0).toUpperCase() + status.slice(1)}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "likes",
+      header: "Likes",
+      cell: ({ row }) => (
+        <span className="text-muted-foreground">{row.original.likes}</span>
+      ),
+    },
+    {
+      id: "actions",
+      cell: (data) => (
+        <div className="flex items-center gap-2">
+          <Dialog>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DialogTrigger asChild>
+                  <Button size="icon" variant="link">
+                    <Eye />
+                  </Button>
+                </DialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent>View</TooltipContent>
+            </Tooltip>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{data.row.original.title}</DialogTitle>
+                <div className="flex items-center gap-2 justify-between">
+                  <DialogDescription>
+                    {data.row.original.author}
+                  </DialogDescription>
+                  <div className="flex items-center">
+                    <Badge
+                      variant="outline"
+                      className="text-muted-foreground px-1.5"
+                    >
+                      {data.row.original.type}
+                    </Badge>
+                  </div>
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
           <Tooltip>
             <TooltipTrigger asChild>
-              <DialogTrigger asChild>
-                <Button size="icon" variant="link">
-                  <Eye />
-                </Button>
-              </DialogTrigger>
+              <Button size="icon" variant="destructive">
+                <Trash />
+              </Button>
             </TooltipTrigger>
-            <TooltipContent>View</TooltipContent>
+            <TooltipContent>Delete</TooltipContent>
           </Tooltip>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{data.row.original.title}</DialogTitle>
-              <div className="flex items-center gap-2 justify-between">
-                <DialogDescription>
-                  {data.row.original.author}
-                </DialogDescription>
-                <div className="flex items-center ">
-                  <Badge
-                    variant="outline"
-                    className="text-muted-foreground px-1.5"
-                  >
-                    {data.row.original.type}
-                  </Badge>
-                </div>
-              </div>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
 
-        {/* Delete Button */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="destructive">
-              <Trash />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Delete</TooltipContent>
-        </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="default"
+                onClick={() => {
+                  const id = data.row.original.id.toString();
+                  setApprovingId(id);
 
-        {/* Approve Button */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="default">
-              <Check />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Approve</TooltipContent>
-        </Tooltip>
+                  approveQuoteMutation.mutate(id);
+                }}
+                disabled={approvingId === data.row.original.id.toString()}
+              >
+                {approvingId === data.row.original.id.toString() ? (
+                  <Loader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Check />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Approve</TooltipContent>
+          </Tooltip>
 
-        {/* Reject Button */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="outline">
-              <X />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Reject</TooltipContent>
-        </Tooltip>
-      </div>
-    ),
-  },
-];
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button size="icon" variant="outline">
+                <X />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Reject</TooltipContent>
+          </Tooltip>
+        </div>
+      ),
+    },
+  ];
+  const [approvingId, setApprovingId] = React.useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const approveQuoteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await axios.get(`/api/quotes/approve?id=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+    retry: false,
+    onSettled: () => {
+      setApprovingId(null);
+      queryClient.invalidateQueries({ queryKey: ["allquotes"] });
+    },
+    onSuccess: () => {
+      toast.success("Quote approved successfully", {
+        description: "The quote has been approved.",
+      });
+    },
+  });
 
-export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -283,11 +315,7 @@ export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
           </Table>
         </div>
         <div className="flex items-center justify-between px-4">
-          <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="flex w-full items-center gap-8 lg:w-fit">
+          <div className="flex w-full items-center justify-end gap-8 lg:w-fit">
             <div className="hidden items-center gap-2 lg:flex">
               <Label htmlFor="rows-per-page" className="text-sm font-medium">
                 Rows per page
@@ -354,17 +382,4 @@ export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
     </Tabs>
   );
 }
-
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
-
-const chartConfig = {
-  desktop: { label: "Desktop", color: "var(--primary)" },
-  mobile: { label: "Mobile", color: "var(--primary)" },
-} satisfies ChartConfig;
+export default DataTable;

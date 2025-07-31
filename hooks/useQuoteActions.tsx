@@ -7,7 +7,6 @@ export const useQuoteActions = () => {
   const getStatistics = useMutation({
     mutationFn: async () => {
       const response = await axios.get("/api/quotes/statistics");
-
       return response.data;
     },
     onSuccess: (data) => {
