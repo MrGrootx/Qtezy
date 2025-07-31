@@ -1,20 +1,28 @@
+"use client";
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { mockQuotes } from "@/datas/quotesMockdata";
+import useGetAllQuotes from "@/hooks/useGetAllQuotes";
 import { Quote } from "@/types/globals";
 
-const mappedQuotes = mockQuotes.map((q: Quote, idx) => ({
-  id: idx + 1,
-  title: q.text,
-  author: q.author,
-  type: q.category,
-  status: q.status ?? "pending",  
-  progress: 100,
-  likes: q.total_likes ?? 0,
-}));
 
 export default function Page() {
+  const { data: allQuotes } = useGetAllQuotes();
+  
+  const quotesArray = Array.isArray(allQuotes) ? allQuotes : [];
+
+  const mappedQuotes = quotesArray.map((q: Quote, idx: number) => ({
+    id: idx + 1,
+    title: q.text,
+    author: q.author,
+    type: q.category,
+    status: q.status ?? "pending",
+    progress: 100,
+    likes: q.total_likes ?? 0,
+  }));
+  
+  
   return (
     <SidebarProvider
       style={
