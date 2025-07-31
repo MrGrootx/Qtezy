@@ -7,7 +7,6 @@ export async function GET() {
     const result = await db`
          SELECT * FROM quotes 
       `;
-      console.log("result", result);
       
     return NextResponse.json({ success: true, data: result });
   } catch (error) {

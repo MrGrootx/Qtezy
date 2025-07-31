@@ -23,28 +23,12 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+
 import { z } from "zod";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { ChartConfig } from "@/components/ui/chart";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,7 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+
 import {
   Table,
   TableBody,
@@ -90,7 +74,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "title",
     header: "Title",
-    // cell: ({ row }) => <TableCellViewer item={row.original} />,
+
     enableHiding: false,
   },
   {

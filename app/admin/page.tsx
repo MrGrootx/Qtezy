@@ -2,7 +2,6 @@
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { mockQuotes } from "@/datas/quotesMockdata";
 import useGetAllQuotes from "@/hooks/useGetAllQuotes";
 import { Quote } from "@/types/globals";
 

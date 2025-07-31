@@ -10,7 +10,6 @@ export const fetchQuotes = async (retries = 3): Promise<any> => {
       throw new Error(res.data.message || "Failed to fetch quotes");
     return res.data.data;
   } catch (error) {
-    console.error("Error fetching quotes:", error);
 
     if (
       error instanceof AxiosError &&
