@@ -163,8 +163,21 @@ export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="destructive">
-                <Trash />
+              <Button
+                size="icon"
+                variant="destructive"
+                onClick={() => {
+                  const id = data.row.original.id.toString();
+                  setDeletingId(id);
+                  deleteQuoteMutation.mutate(id);
+                }}
+                disabled={deletingId === data.row.original.id.toString()}
+              >
+                {deletingId === data.row.original.id.toString() ? (
+                  <Loader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Trash />
+                )}
               </Button>
             </TooltipTrigger>
             <TooltipContent>Delete</TooltipContent>
@@ -195,8 +208,21 @@ export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
 
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button size="icon" variant="outline">
-                <X />
+              <Button
+                size="icon"
+                variant="outline"
+                onClick={() => {
+                  const id = data.row.original.id.toString();
+                  setRejectingId(id);
+                  rejectQuoteMutation.mutate(id);
+                }}
+                disabled={rejectingId === data.row.original.id.toString()}
+              >
+                {rejectingId === data.row.original.id.toString() ? (
+                  <Loader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <X />
+                )}
               </Button>
             </TooltipTrigger>
             <TooltipContent>Reject</TooltipContent>
@@ -206,6 +232,8 @@ export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
     },
   ];
   const [approvingId, setApprovingId] = React.useState<string | null>(null);
+  const [rejectingId, setRejectingId] = React.useState<string | null>(null);
+  const [deletingId, setDeletingId] = React.useState<string | null>(null);
   const queryClient = useQueryClient();
   const approveQuoteMutation = useMutation({
     mutationFn: async (id: string) => {
@@ -223,6 +251,56 @@ export function DataTable({ data }: { data: z.infer<typeof schema>[] }) {
     onSuccess: () => {
       toast.success("Quote approved successfully", {
         description: "The quote has been approved.",
+      });
+    },
+  });
+
+  const rejectQuoteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await axios.post(`/api/quotes/reject?id=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+    retry: false,
+    onSettled: () => {
+      setRejectingId(null);
+      queryClient.invalidateQueries({ queryKey: ["allquotes"] });
+    },
+    onSuccess: () => {
+      toast.success("Quote rejected successfully", {
+        description: "The quote has been rejected.",
+      });
+    },
+    onError: (error) => {
+      toast.error("Failed to reject quote", {
+        description: error instanceof Error ? error.message : "Unknown error",
+      });
+    },
+  });
+
+  const deleteQuoteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await axios.delete(`/api/quotes/delete?id=${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+    retry: false,
+    onSettled: () => {
+      setDeletingId(null);
+      queryClient.invalidateQueries({ queryKey: ["allquotes"] });
+    },
+    onSuccess: () => {
+      toast.success("Quote deleted successfully", {
+        description: "The quote has been deleted.",
+      });
+    },
+    onError: (error) => {
+      toast.error("Failed to delete quote", {
+        description: error instanceof Error ? error.message : "Unknown error",
       });
     },
   });

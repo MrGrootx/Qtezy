@@ -4,13 +4,20 @@ import { ratelimit, strictRatelimit } from "@/lib/ratelimiter";
 import { getClientIp } from "@/lib/ip";
 
 const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/forum(.*)"]);
-const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+const isAdminRoute = createRouteMatcher([
+  "/admin(.*)",
+  "/api/quotes/approve",
+  "/api/quotes/reject",
+  "/api/quotes/delete",
+]);
 const isApiRoute = createRouteMatcher(["/api(.*)"]);
 const isQuotesApiRoute = createRouteMatcher(["/api/quotes"]);
 const isSensitiveApiRoute = createRouteMatcher([
   "/api/quotes/create",
   "/api/quotes/approve",
-  "/api/quotes/(.+)/like",
+  "/api/quotes/reject",
+  "/api/quotes/delete",
+  "/api/quotes/like",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
