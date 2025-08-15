@@ -5,7 +5,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const fetchQuotes = async (retries = 3): Promise<any> => {
   try {
-    const res = await axios(`${process.env.NEXT_PUBLIC_BASE_URL}/api/quotes`);
+    const res = await axios(`/api/quotes`);
     if (res.status !== 200)
       throw new Error(res.data.message || "Failed to fetch quotes");
     return res.data.data;
@@ -35,7 +35,7 @@ export const likeQuote = async (
 ): Promise<{ success: boolean; message: string }> => {
   try {
     const res = await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/quotes/${quoteId}/like`
+      `/api/quotes/${quoteId}/like`
     );
 
 
